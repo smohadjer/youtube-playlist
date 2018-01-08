@@ -1,0 +1,38 @@
+.youtube-playlist {
+	width: 100%;
+	max-width: 640px;
+}
+
+.youtube-playlist-wrapper {
+	position: relative;
+	padding-bottom: 56.25%;
+	width: 100%;
+}
+
+.youtube-playlist-player {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+}
+
+.youtube-playlist-list {
+	padding: 0;
+	white-space:nowrap;
+	overflow-x: auto;
+}
+
+.youtube-playlist-list li {
+	list-style: none;
+	display: inline-block;
+	margin-right: 10px;
+}
+
+.youtube-playlist-list li img {
+	border: solid 2px #fff;
+}
+
+.youtube-playlist-list li img.selected {
+	border-color: red;
+}
