@@ -1,15 +1,16 @@
-.youtube-playlist {
+.ytplayer {
 	width: 100%;
 	max-width: 640px;
 }
 
-.youtube-playlist-wrapper {
+.ytplayer-wrapper {
 	position: relative;
 	padding-bottom: 56.25%;
 	width: 100%;
+	height: 0;
 }
 
-.youtube-playlist-player {
+.ytplayer-player {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -17,22 +18,26 @@
 	width: 100%;
 }
 
-.youtube-playlist-list {
+.ytplayer-list {
 	padding: 0;
 	white-space:nowrap;
 	overflow-x: auto;
 }
 
-.youtube-playlist-list li {
+.ytplayer-list li {
 	list-style: none;
 	display: inline-block;
 	margin-right: 10px;
 }
 
-.youtube-playlist-list li img {
+.ytplayer-list li {
 	border: solid 2px #fff;
 }
 
-.youtube-playlist-list li img.selected {
+.ytplayer-list li.selected {
 	border-color: red;
+}
+
+.ytplayer-list li img {
+	vertical-align: bottom;
 }

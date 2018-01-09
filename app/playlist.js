@@ -6,59 +6,73 @@ var youtubePlaylist = {
 		return list.getAttribute('data-api-key');
 	},
 	init: function() {
-		youtubePlaylist.lists = document.querySelectorAll('.youtube-playlist');
-		let done = false;
+		youtubePlaylist.lists = document.querySelectorAll('.ytplayer');
 
+		//load playlists
 		youtubePlaylist.lists.forEach(function(list, index) {
+			let playlistId = youtubePlaylist.getPlaylistId(list);
 
-			gapi.client.setApiKey(youtubePlaylist.getApiKey(list));
-			gapi.client.load('youtube', 'v3', function() {
-				const request = gapi.client.youtube.playlistItems.list({
-					part: 'snippet',
-					playlistId: youtubePlaylist.getPlaylistId(list),
-					maxResults: 50
+			if (playlistId) {
+				gapi.client.setApiKey(youtubePlaylist.getApiKey(list));
+				gapi.client.load('youtube', 'v3', function() {
+					const request = gapi.client.youtube.playlistItems.list({
+						part: 'snippet',
+						playlistId: playlistId,
+						maxResults: 50
+					});
+
+					request.execute(function(response) {
+						let firstPlaylistItem;
+
+						for (let i = 0; i < response.items.length; i++) {
+							var snippet = response.items[i].snippet;
+							youtubePlaylist.addItem(list, snippet);
+
+							if (i === 0) {
+								videoId = snippet.resourceId.videoId;
+							}
+						}
+
+						//display first video in playlist
+						youtubePlaylist.showVideo(list, videoId);
+						let li = list.querySelectorAll('.ytplayer-list li')[0];
+						youtubePlaylist.updatePlaylist(li);
+					});
 				});
-
-				request.execute(function(response) {
-					for (let i = 0; i < response.items.length; i++) {
-						var snippet = response.items[i].snippet;
-						youtubePlaylist.addItem(list, snippet);
-					}
-
-					if (!done) {
-						done = true;
-						youtubePlaylist.loadAPI();
-					}
-				});
-			});
+			}
 		});
+
+		youtubePlaylist.loadAPI();
 	},
-	updateVideo: function(e) {
-		const img = e.target;
-		const li = img.parentNode;
+	updateVideo: function(li) {
+		const videoId = li.getAttribute('data-id');
+		youtubePlaylist.player.loadVideoById(videoId);
+	},
+	updatePlaylist: function(li) {
 		const ul = li.parentNode;
-		const list = ul.parentNode;
-		const thumbs = ul.querySelectorAll('li img');
+		const thumbs = ul.querySelectorAll('li');
 
 		Array.prototype.forEach.call(thumbs, function(el, i){
 			el.classList.remove('selected');
 		});
 
-		img.classList.add('selected');
-
-		const videoId = img.getAttribute('data-id');
-
-		youtubePlaylist.player.loadVideoById(videoId);
+		li.classList.add('selected');
 	},
 	addItem: function(list, snippet) {
-		ul = list.querySelector('.youtube-playlist-list');
+		ul = list.querySelector('.ytplayer-list');
 		const thumbnail = snippet.thumbnails.default.url;
 		const videoId = snippet.resourceId.videoId;
-		const img = `<img data-id="${videoId}" src="${thumbnail}" />`;
+		const img = `<img src="${thumbnail}" />`;
 		const li = document.createElement('li');
 
 		li.innerHTML = img;
-		li.addEventListener('click', youtubePlaylist.updateVideo);
+		li.setAttribute('data-id', videoId);
+		li.addEventListener('click', function(e) {
+			const li = e.target.parentNode;
+			youtubePlaylist.updatePlaylist(li);
+			youtubePlaylist.updateVideo(li);
+		});
+
 		ul.appendChild(li);
 	},
 	loadAPI: function() {
@@ -66,19 +80,9 @@ var youtubePlaylist = {
 		tag.src = "https://www.youtube.com/iframe_api";
 		var firstScriptTag = document.getElementsByTagName('script')[0];
 		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-	}
-};
-
-gapi.load('client', youtubePlaylist.init);
-
-function onYouTubeIframeAPIReady() {
-	youtubePlaylist.lists.forEach(function(list, index) {
-		const ul = list.querySelector('.youtube-playlist-list');
-		const img = ul.querySelector('li img');
-		const videoId = img.getAttribute('data-id');
-		img.classList.add('selected');
-
-		youtubePlaylist.player = new YT.Player(list.querySelector('.youtube-playlist-player'), {
+	},
+	showVideo: function(list, videoId) {
+		youtubePlaylist.player = new YT.Player(list.querySelector('.ytplayer-player'), {
 			videoId: videoId,
 			playerVars: {
 				'autoplay': 0,
@@ -90,7 +94,21 @@ function onYouTubeIframeAPIReady() {
 				'onStateChange': onPlayerStateChange
 			}
 		});
+	}
+};
 
+gapi.load('client', youtubePlaylist.init);
+
+function onYouTubeIframeAPIReady() {
+	console.log('onYouTubeIframeAPIReady');
+
+	youtubePlaylist.lists.forEach(function(list, index) {
+		let playlistId = youtubePlaylist.getPlaylistId(list);
+		let videoId = list.getAttribute('data-video-id')
+
+		if (videoId) {
+			youtubePlaylist.showVideo(list, videoId);
+		}
 	});
 }
 
