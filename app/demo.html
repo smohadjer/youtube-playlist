@@ -11,32 +11,31 @@
 		<h1>Youtube without playlist</h1>
 		<div class="ytplayer" data-video-id="ztjFZysoTGk">
 			<div class="ytplayer-wrapper">
-				<div class="ytplayer-player"></div>
+				<div class="ytplayer-video"></div>
 			</div>
-			<!-- Add following element if you want to display a play list -->
-			<!--<ul class="ytplayer-list"></ul>-->
 		</div>
 
-		<br /><br /><br /><br />
+		<br /><br /><br />
 
 		<h1>Youtube with playlist</h1>
 		<div class="ytplayer" data-playlist-id="FL5lXztBly8UeivS8M3uQbxA" data-api-key="AIzaSyDqnBq55I_HGGdNdyVL94VqrFwLSqy7OqI">
 			<div class="ytplayer-wrapper">
-				<div class="ytplayer-player"></div>
+				<div class="ytplayer-video"></div>
 			</div>
-			<!-- Add following element if you want to display a play list -->
 			<ul class="ytplayer-list"></ul>
+			<!-- title and description are optional elements -->
+			<h2 class="ytplayer-title"></h2>
+			<p class="ytplayer-description"></p>
 		</div>
 
-		<br /><br /><br /><br />
+		<br /><br /><br />
 
-		<h1>Youtube with playlist above video</h1>
+		<h1>Youtube with vertical playlist</h1>
 		<div class="ytplayer" data-playlist-id="PLrsjrhqEEcIjkTdI0RMSxzmbiiZq_ig3c" data-api-key="AIzaSyDqnBq55I_HGGdNdyVL94VqrFwLSqy7OqI">
-			<!-- Add following element if you want to display a play list -->
-			<ul class="ytplayer-list"></ul>
 			<div class="ytplayer-wrapper">
-				<div class="ytplayer-player"></div>
+				<div class="ytplayer-video"></div>
 			</div>
+			<ul class="ytplayer-list"></ul>
 		</div>
 
 		<script src="https://apis.google.com/js/api.js"></script>
@@ -45,14 +44,14 @@
 			const elms = document.querySelectorAll('.ytplayer');
 
 			gapi.load('client', function() {
-				console.log('google api is loaded!');
+				//console.log('google api is loaded!');
 				elms.forEach(function(elm) {
 					const ytplayer = new YTPlayer(elm);
 				});
 			});
 
 			function onYouTubeIframeAPIReady() {
-				console.log('onYouTubeIframeAPIReady');
+				//console.log('onYouTubeIframeAPIReady');
 
 				if (window.CustomEvent) {
 					var event = new CustomEvent('youtubeIframeApiIsReady', {detail: {some: 'data'}});
