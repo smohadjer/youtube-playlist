@@ -12,21 +12,67 @@
 		<div class="ytplayer" data-video-id="ztjFZysoTGk">
 			<div class="ytplayer-wrapper">
 				<div class="ytplayer-player"></div>
-				<ul class="ytplayer-list"></ul>
 			</div>
+			<!-- Add following element if you want to display a play list -->
+			<!--<ul class="ytplayer-list"></ul>-->
 		</div>
 
-		<br /><br /><br />
+		<br /><br /><br /><br />
 
 		<h1>Youtube with playlist</h1>
 		<div class="ytplayer" data-playlist-id="FL5lXztBly8UeivS8M3uQbxA" data-api-key="AIzaSyDqnBq55I_HGGdNdyVL94VqrFwLSqy7OqI">
 			<div class="ytplayer-wrapper">
 				<div class="ytplayer-player"></div>
 			</div>
+			<!-- Add following element if you want to display a play list -->
 			<ul class="ytplayer-list"></ul>
 		</div>
 
+		<br /><br /><br /><br />
+
+		<h1>Youtube with playlist above video</h1>
+		<div class="ytplayer" data-playlist-id="PLrsjrhqEEcIjkTdI0RMSxzmbiiZq_ig3c" data-api-key="AIzaSyDqnBq55I_HGGdNdyVL94VqrFwLSqy7OqI">
+			<!-- Add following element if you want to display a play list -->
+			<ul class="ytplayer-list"></ul>
+			<div class="ytplayer-wrapper">
+				<div class="ytplayer-player"></div>
+			</div>
+		</div>
+
 		<script src="https://apis.google.com/js/api.js"></script>
-		<script src="playlist.js"></script>
+		<script src="ytplayer.js"></script>
+		<script>
+			const elms = document.querySelectorAll('.ytplayer');
+
+			gapi.load('client', function() {
+				console.log('google api is loaded!');
+				elms.forEach(function(elm) {
+					const ytplayer = new YTPlayer(elm);
+				});
+			});
+
+			function onYouTubeIframeAPIReady() {
+				console.log('onYouTubeIframeAPIReady');
+
+				if (window.CustomEvent) {
+					var event = new CustomEvent('youtubeIframeApiIsReady', {detail: {some: 'data'}});
+				} else {
+					var event = document.createEvent('CustomEvent');
+					event.initCustomEvent('youtubeIframeApiIsReady', true, true, {some: 'data'});
+				}
+
+				elms.forEach(function(elm) {
+					elm.dispatchEvent(event);
+				});
+			}
+
+			function onPlayerReady(e) {
+				//console.log(e);
+			}
+
+			function onPlayerStateChange(e) {
+				//console.log(e);
+			}
+		</script>
 	</body>
 </html>
