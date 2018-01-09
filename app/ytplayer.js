@@ -4,10 +4,9 @@ class YTPlayer {
 	constructor(element) {
 		this.element = element;
 		this.playlistId = this.element.getAttribute('data-playlist-id');
-		this.apiKey = this.element.getAttribute('data-api-key');
 		this.videoId = this.element.getAttribute('data-video-id');
 
-		if (this.playlistId && this.apiKey) {
+		if (this.playlistId) {
 			this.fetchPlaylist();
 		} else {
 			this.element.addEventListener('youtubeIframeApiIsReady', () => {
@@ -20,7 +19,6 @@ class YTPlayer {
 	}
 
 	fetchPlaylist() {
-		gapi.client.setApiKey(this.apiKey);
 		gapi.client.load('youtube', 'v3', () => {
 			const request = gapi.client.youtube.playlistItems.list({
 				part: 'snippet',
@@ -98,6 +96,13 @@ class YTPlayer {
 	loadYoutubeIframeAPI() {
 		const tag = document.createElement('script');
 		tag.src = "https://www.youtube.com/iframe_api";
+		const firstScriptTag = document.getElementsByTagName('script')[0];
+		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+	}
+
+	loadYoutubeDataAPI() {
+		const tag = document.createElement('script');
+		tag.src = "https://apis.google.com/js/api.js";
 		const firstScriptTag = document.getElementsByTagName('script')[0];
 		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 	}

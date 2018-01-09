@@ -15,10 +15,16 @@
 			</div>
 		</div>
 
-		<br /><br /><br />
-
 		<h1>Youtube with playlist</h1>
-		<div class="ytplayer" data-playlist-id="FL5lXztBly8UeivS8M3uQbxA" data-api-key="AIzaSyDqnBq55I_HGGdNdyVL94VqrFwLSqy7OqI">
+		<div class="ytplayer" data-playlist-id="FL5lXztBly8UeivS8M3uQbxA">
+			<div class="ytplayer-wrapper">
+				<div class="ytplayer-video"></div>
+			</div>
+			<ul class="ytplayer-list"></ul>
+		</div>
+
+		<h1>Youtube with playlist + title and description</h1>
+		<div class="ytplayer" data-playlist-id="PLrsjrhqEEcIjkTdI0RMSxzmbiiZq_ig3c">
 			<div class="ytplayer-wrapper">
 				<div class="ytplayer-video"></div>
 			</div>
@@ -28,49 +34,41 @@
 			<p class="ytplayer-description"></p>
 		</div>
 
-		<br /><br /><br />
-
-		<h1>Youtube with vertical playlist</h1>
-		<div class="ytplayer" data-playlist-id="PLrsjrhqEEcIjkTdI0RMSxzmbiiZq_ig3c" data-api-key="AIzaSyDqnBq55I_HGGdNdyVL94VqrFwLSqy7OqI">
-			<div class="ytplayer-wrapper">
-				<div class="ytplayer-video"></div>
-			</div>
-			<ul class="ytplayer-list"></ul>
-		</div>
-
+		<!-- api.js is required for display of play lists, if you have no play lists, just remove this script -->
 		<script src="https://apis.google.com/js/api.js"></script>
 		<script src="ytplayer.js"></script>
 		<script>
-			const elms = document.querySelectorAll('.ytplayer');
-
-			gapi.load('client', function() {
-				//console.log('google api is loaded!');
-				elms.forEach(function(elm) {
+			function init() {
+				document.querySelectorAll('.ytplayer').forEach(function(elm) {
 					const ytplayer = new YTPlayer(elm);
 				});
+			}
+
+			// if you have no play lists and only youtube videos, then you
+			// can run init directly
+			// init();
+
+			// if you show play lists then init should be called after google api is loaded
+			gapi.load('client', function() {
+				//console.log('google api is loaded!');
+				gapi.client.setApiKey('AIzaSyDqnBq55I_HGGdNdyVL94VqrFwLSqy7OqI');
+				init();
 			});
+
 
 			function onYouTubeIframeAPIReady() {
 				//console.log('onYouTubeIframeAPIReady');
 
+				//trigger a custom event when youtube iframe API is ready
 				if (window.CustomEvent) {
 					var event = new CustomEvent('youtubeIframeApiIsReady', {detail: {some: 'data'}});
 				} else {
 					var event = document.createEvent('CustomEvent');
 					event.initCustomEvent('youtubeIframeApiIsReady', true, true, {some: 'data'});
 				}
-
-				elms.forEach(function(elm) {
+				document.querySelectorAll('.ytplayer').forEach(function(elm) {
 					elm.dispatchEvent(event);
 				});
-			}
-
-			function onPlayerReady(e) {
-				//console.log(e);
-			}
-
-			function onPlayerStateChange(e) {
-				//console.log(e);
 			}
 		</script>
 	</body>
