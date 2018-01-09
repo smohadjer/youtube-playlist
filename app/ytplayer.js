@@ -100,13 +100,6 @@ class YTPlayer {
 		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 	}
 
-	loadYoutubeDataAPI() {
-		const tag = document.createElement('script');
-		tag.src = "https://apis.google.com/js/api.js";
-		const firstScriptTag = document.getElementsByTagName('script')[0];
-		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-	}
-
 	showVideo(videoId) {
 		this.player = new YT.Player(this.element.querySelector('.ytplayer-video'), {
 			videoId: videoId,

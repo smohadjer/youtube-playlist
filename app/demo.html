@@ -50,11 +50,12 @@
 
 			// if you show play lists then init should be called after google api is loaded
 			gapi.load('client', function() {
-				//console.log('google api is loaded!');
-				gapi.client.setApiKey('AIzaSyDqnBq55I_HGGdNdyVL94VqrFwLSqy7OqI');
-				init();
+				gapi.client.init({
+					apiKey: 'AIzaSyDqnBq55I_HGGdNdyVL94VqrFwLSqy7OqI'
+				}).then(function() {
+					init();
+				});
 			});
-
 
 			function onYouTubeIframeAPIReady() {
 				//console.log('onYouTubeIframeAPIReady');
