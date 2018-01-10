@@ -14,31 +14,27 @@ class YTPlayer {
 	}
 
 	fetchPlaylist() {
-		gapi.client.load('youtube', 'v3', () => {
-			const request = gapi.client.youtube.playlistItems.list({
-				part: 'snippet',
-				playlistId: this.playlistId,
-				maxResults: 50
-			});
+		const request = gapi.client.youtube.playlistItems.list({
+			part: 'snippet',
+			playlistId: this.playlistId,
+			maxResults: 50
+		}).then((response) => {
+			
+			let items = response.result.items;
+			let videoId;
 
-			request.execute((response) => {
-				let videoId;
-
-				for (let i = 0; i < response.items.length; i++) {
-					const snippet = response.items[i].snippet;
-					//console.log(snippet);
-					this.addItem(snippet);
-
-					if (i === 0) {
-						videoId = snippet.resourceId.videoId;
-					}
+			for (let i = 0; i < items.length; i++) {
+				const snippet = items[i].snippet;
+				this.addItem(snippet);
+				if (i === 0) {
+					videoId = snippet.resourceId.videoId;
 				}
+			}
 
-				//display first video in playlist
-				this.showVideo(videoId);
-				let li = this.element.querySelectorAll('.ytplayer-list li')[0];
-				this.updatePlaylist(li);
-			});
+			//display first video in playlist
+			this.showVideo(videoId);
+			let li = this.element.querySelectorAll('.ytplayer-list li')[0];
+			this.updatePlaylist(li);
 		});
 	}
 

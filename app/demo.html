@@ -41,22 +41,27 @@
 		<script src="ytplayer.js"></script>
 		<script>
 			let youTubeIframeAPIIsReady = (typeof YT.Player === 'undefined') ? false : true;
-			let googleApiIsReady = false;
+			let youtubePlaylistApiIsReady = false;
 
 			gapi.load('client', function() {
-				googleApiIsReady = true;
+				console.log(gapi.client);
+
 				gapi.client.init({
-					apiKey: 'AIzaSyDqnBq55I_HGGdNdyVL94VqrFwLSqy7OqI'
-				})
-				if (youTubeIframeAPIIsReady && googleApiIsReady) {
-					initYTPlayer();
-				}
+					apiKey: 'AIzaSyDqnBq55I_HGGdNdyVL94VqrFwLSqy7OqI',
+					discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest']
+				}).then(function() {
+					youtubePlaylistApiIsReady = true;
+
+					if (youTubeIframeAPIIsReady && youtubePlaylistApiIsReady) {
+						initYTPlayer();
+					}
+				});
 			});
 
 			function onYouTubeIframeAPIReady() {
 				console.log('onYouTubeIframeAPIReady');
 				youTubeIframeAPIIsReady = true;
-				if (youTubeIframeAPIIsReady && googleApiIsReady) {
+				if (youTubeIframeAPIIsReady && youtubePlaylistApiIsReady) {
 					initYTPlayer();
 				}
 			}
