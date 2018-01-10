@@ -8,12 +8,14 @@
 	</head>
 	<body>
 
+		<!--
 		<h1>Youtube without playlist</h1>
 		<div class="ytplayer" data-video-id="ztjFZysoTGk">
 			<div class="ytplayer-wrapper">
 				<div class="ytplayer-video"></div>
 			</div>
 		</div>
+		-->
 
 		<h1>Youtube with playlist</h1>
 		<div class="ytplayer" data-playlist-id="FL5lXztBly8UeivS8M3uQbxA">
@@ -34,41 +36,34 @@
 			<p class="ytplayer-description"></p>
 		</div>
 
-		<!-- api.js is required for display of play lists, if you have no play lists, just remove this script -->
+		<script src="https://www.youtube.com/iframe_api"></script>
 		<script src="https://apis.google.com/js/api.js"></script>
 		<script src="ytplayer.js"></script>
 		<script>
-			function init() {
-				document.querySelectorAll('.ytplayer').forEach(function(elm) {
-					const ytplayer = new YTPlayer(elm);
-				});
-			}
+			let youTubeIframeAPIIsReady = (typeof YT.Player === 'undefined') ? false : true;
+			let googleApiIsReady = false;
 
-			// if you have no play lists and only youtube videos, then you
-			// can run init directly
-			// init();
-
-			// if you show play lists then init should be called after google api is loaded
 			gapi.load('client', function() {
+				googleApiIsReady = true;
 				gapi.client.init({
 					apiKey: 'AIzaSyDqnBq55I_HGGdNdyVL94VqrFwLSqy7OqI'
-				}).then(function() {
-					init();
-				});
+				})
+				if (youTubeIframeAPIIsReady && googleApiIsReady) {
+					initYTPlayer();
+				}
 			});
 
 			function onYouTubeIframeAPIReady() {
-				//console.log('onYouTubeIframeAPIReady');
-
-				//trigger a custom event when youtube iframe API is ready
-				if (window.CustomEvent) {
-					var event = new CustomEvent('youtubeIframeApiIsReady', {detail: {some: 'data'}});
-				} else {
-					var event = document.createEvent('CustomEvent');
-					event.initCustomEvent('youtubeIframeApiIsReady', true, true, {some: 'data'});
+				console.log('onYouTubeIframeAPIReady');
+				youTubeIframeAPIIsReady = true;
+				if (youTubeIframeAPIIsReady && googleApiIsReady) {
+					initYTPlayer();
 				}
+			}
+
+			function initYTPlayer() {
 				document.querySelectorAll('.ytplayer').forEach(function(elm) {
-					elm.dispatchEvent(event);
+					const ytplayer = new YTPlayer(elm);
 				});
 			}
 		</script>

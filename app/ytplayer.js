@@ -9,13 +9,8 @@ class YTPlayer {
 		if (this.playlistId) {
 			this.fetchPlaylist();
 		} else {
-			this.element.addEventListener('youtubeIframeApiIsReady', () => {
-				//console.log('event youtubeIframeApiIsReady fired!');
-				this.showVideo(this.videoId);
-			});
+			this.showVideo(this.videoId);
 		}
-
-		this.loadYoutubeIframeAPI();
 	}
 
 	fetchPlaylist() {
@@ -91,13 +86,6 @@ class YTPlayer {
 		});
 
 		ul.appendChild(li);
-	}
-
-	loadYoutubeIframeAPI() {
-		const tag = document.createElement('script');
-		tag.src = "https://www.youtube.com/iframe_api";
-		const firstScriptTag = document.getElementsByTagName('script')[0];
-		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 	}
 
 	showVideo(videoId) {
