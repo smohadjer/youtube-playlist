@@ -44,8 +44,6 @@
 			let youtubePlaylistApiIsReady = false;
 
 			gapi.load('client', function() {
-				console.log(gapi.client);
-
 				gapi.client.init({
 					apiKey: 'AIzaSyDqnBq55I_HGGdNdyVL94VqrFwLSqy7OqI',
 					discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest']
@@ -59,7 +57,6 @@
 			});
 
 			function onYouTubeIframeAPIReady() {
-				console.log('onYouTubeIframeAPIReady');
 				youTubeIframeAPIIsReady = true;
 				if (youTubeIframeAPIIsReady && youtubePlaylistApiIsReady) {
 					initYTPlayer();
