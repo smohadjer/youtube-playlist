@@ -1,3 +1,3 @@
-Demo: 
+Demo:
 
-https://smohadjer.github.io/youtube-playlist/app/demo.html
+https://smohadjer.github.io/youtube-playlist/demo/demo.html

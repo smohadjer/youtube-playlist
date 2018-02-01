@@ -1,15 +1,17 @@
-var gulp = require('gulp');
-var babel = require('gulp-babel');
-var uglify = require('gulp-uglify');
-var runSequence = require('run-sequence');
-var rename = require("gulp-rename");
+const gulp = require('gulp');
+const babel = require('gulp-babel');
+const uglify = require('gulp-uglify');
+const runSequence = require('run-sequence');
+const rename = require("gulp-rename");
+const watch = require('gulp-watch');
+const batch = require('gulp-batch');
 
 gulp.task('babel', () =>
-    gulp.src('src/ytplayer.js')
-        .pipe(babel({
-            presets: ['env']
-        }))
-        .pipe(gulp.dest('dist'))
+	gulp.src('src/ytplayer.js')
+		.pipe(babel({
+				presets: ['env']
+			}))
+		.pipe(gulp.dest('dist'))
 );
 
 gulp.task('compress', () => {
@@ -17,6 +19,19 @@ gulp.task('compress', () => {
 		.pipe(uglify())
 		.pipe(rename({ suffix: '.min' }))
 		.pipe(gulp.dest('dist'))
+});
+
+gulp.task('watches6', () => {
+	watch('src/ytplayer.js', batch(function (events, done) {
+		gulp.start('build', done);
+	}));
+});
+
+gulp.task('serve', function(callback) {
+	runSequence(
+		['babel'],
+		['watches6'],
+		callback);
 });
 
 gulp.task('build', function(callback) {
