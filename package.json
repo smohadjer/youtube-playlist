@@ -1,19 +1,28 @@
 {
-  "name": "youtube-playlist",
-  "version": "1.0.0",
-  "description": "Demo:",
-  "main": "app/ytplayer.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Saeid Mohadjer",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/smohadjer/youtube-playlist.git"
-  },
-  "bugs": {
-    "url": "https://github.com/smohadjer/youtube-playlist/issues"
-  },
-  "homepage": "https://github.com/smohadjer/youtube-playlist#readme"
+	"name": "youtube-playlist",
+	"version": "1.0.0",
+	"description": "Demo:",
+	"main": "app/ytplayer.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "Saeid Mohadjer",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/smohadjer/youtube-playlist.git"
+	},
+	"bugs": {
+		"url": "https://github.com/smohadjer/youtube-playlist/issues"
+	},
+	"homepage": "https://github.com/smohadjer/youtube-playlist#readme",
+	"devDependencies": {
+		"babel-core": "^6.26.0",
+		"babel-preset-env": "^1.6.1",
+		"gulp": "^3.9.1",
+		"gulp-babel": "^7.0.1",
+		"gulp-rename": "^1.2.2",
+		"gulp-uglify": "^3.0.0",
+		"run-sequence": "^1.1.5"
+	}
 }
