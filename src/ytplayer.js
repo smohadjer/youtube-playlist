@@ -1,6 +1,6 @@
 /*
  * @name          ytplayer.js
- * @version       1.0.1
+ * @version       1.1.0
  * @lastmodified  2018-02-06
  * @author        Saeid Mohadjer
  * @repo		  https://github.com/smohadjer/youtube-playlist
@@ -11,8 +11,10 @@
 'use strict';
 
 class YTPlayer {
-	constructor(element) {
-		this.element = element;
+	constructor(options) {
+		this.element = options.element;
+		this.cb_playlist_click = options.cb_playlist_click;
+		this.cb_init = options.cb_init;
 		this.playlistId = this.element.getAttribute('data-playlist-id');
 		this.videoId = this.element.getAttribute('data-video-id');
 
@@ -31,6 +33,9 @@ class YTPlayer {
 			const snippet = response.result.items[0].snippet;
 			this.showVideo(this.videoId);
 			this.updateVideoInfo(snippet.title, snippet.description);
+			if (typeof this.cb_init === 'function') {
+				this.cb_init();
+			}
 		});
 	}
 
@@ -56,6 +61,9 @@ class YTPlayer {
 			this.showVideo(videoId);
 			let li = this.element.querySelectorAll('.ytplayer-list li')[0];
 			this.updatePlaylist(li);
+			if (typeof this.cb_init === 'function') {
+				this.cb_init();
+			}
 		});
 	}
 
@@ -105,6 +113,10 @@ class YTPlayer {
 			const li = event.target.parentNode;
 			this.updatePlaylist(li);
 			this.updateVideo(li);
+
+			if (typeof this.cb_playlist_click === 'function') {
+				this.cb_playlist_click(li);
+			}
 		});
 
 		ul.appendChild(li);

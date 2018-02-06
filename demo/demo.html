@@ -63,7 +63,15 @@
 
 			function initYTPlayer() {
 				document.querySelectorAll('.ytplayer').forEach(function(elm) {
-					const ytplayer = new YTPlayer(elm);
+					const ytplayer = new YTPlayer({
+						element: elm,
+						cb_init: function() {
+							//console.log('initialized');
+						},
+						cb_playlist_click: function(listItem) {
+							//console.log('play list clicked');
+						}
+					});
 				});
 			}
 		</script>

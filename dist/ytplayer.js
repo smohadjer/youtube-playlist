@@ -1,6 +1,6 @@
 /*
  * @name          ytplayer.js
- * @version       1.0.1
+ * @version       1.1.0
  * @lastmodified  2018-02-06
  * @author        Saeid Mohadjer
  * @repo		  https://github.com/smohadjer/youtube-playlist
@@ -15,10 +15,12 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var YTPlayer = function () {
-	function YTPlayer(element) {
+	function YTPlayer(options) {
 		_classCallCheck(this, YTPlayer);
 
-		this.element = element;
+		this.element = options.element;
+		this.cb_playlist_click = options.cb_playlist_click;
+		this.cb_init = options.cb_init;
 		this.playlistId = this.element.getAttribute('data-playlist-id');
 		this.videoId = this.element.getAttribute('data-video-id');
 
@@ -41,6 +43,9 @@ var YTPlayer = function () {
 				var snippet = response.result.items[0].snippet;
 				_this.showVideo(_this.videoId);
 				_this.updateVideoInfo(snippet.title, snippet.description);
+				if (typeof _this.cb_init === 'function') {
+					_this.cb_init();
+				}
 			});
 		}
 	}, {
@@ -69,6 +74,9 @@ var YTPlayer = function () {
 				_this2.showVideo(videoId);
 				var li = _this2.element.querySelectorAll('.ytplayer-list li')[0];
 				_this2.updatePlaylist(li);
+				if (typeof _this2.cb_init === 'function') {
+					_this2.cb_init();
+				}
 			});
 		}
 	}, {
@@ -124,6 +132,10 @@ var YTPlayer = function () {
 				var li = event.target.parentNode;
 				_this3.updatePlaylist(li);
 				_this3.updateVideo(li);
+
+				if (typeof _this3.cb_playlist_click === 'function') {
+					_this3.cb_playlist_click(li);
+				}
 			});
 
 			ul.appendChild(li);
