@@ -1,3 +1,13 @@
+/*
+ * @name          ytplayer.js
+ * @version       1.0.1
+ * @lastmodified  2018-02-06
+ * @author        Saeid Mohadjer
+ * @repo		  https://github.com/smohadjer/youtube-playlist
+ *
+ * Licensed under the MIT License
+ */
+
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -15,14 +25,28 @@ var YTPlayer = function () {
 		if (this.playlistId) {
 			this.fetchPlaylist();
 		} else {
-			this.showVideo(this.videoId);
+			this.fetchVideo();
 		}
 	}
 
 	_createClass(YTPlayer, [{
+		key: 'fetchVideo',
+		value: function fetchVideo() {
+			var _this = this;
+
+			var request = gapi.client.youtube.videos.list({
+				part: 'snippet',
+				id: this.videoId
+			}).then(function (response) {
+				var snippet = response.result.items[0].snippet;
+				_this.showVideo(_this.videoId);
+				_this.updateVideoInfo(snippet.title, snippet.description);
+			});
+		}
+	}, {
 		key: 'fetchPlaylist',
 		value: function fetchPlaylist() {
-			var _this = this;
+			var _this2 = this;
 
 			var request = gapi.client.youtube.playlistItems.list({
 				part: 'snippet',
@@ -35,16 +59,16 @@ var YTPlayer = function () {
 
 				for (var i = 0; i < items.length; i++) {
 					var snippet = items[i].snippet;
-					_this.addItem(snippet);
+					_this2.addItem(snippet);
 					if (i === 0) {
 						videoId = snippet.resourceId.videoId;
 					}
 				}
 
 				//display first video in playlist
-				_this.showVideo(videoId);
-				var li = _this.element.querySelectorAll('.ytplayer-list li')[0];
-				_this.updatePlaylist(li);
+				_this2.showVideo(videoId);
+				var li = _this2.element.querySelectorAll('.ytplayer-list li')[0];
+				_this2.updatePlaylist(li);
 			});
 		}
 	}, {
@@ -58,27 +82,33 @@ var YTPlayer = function () {
 		value: function updatePlaylist(li) {
 			var ul = li.parentNode;
 			var thumbs = ul.querySelectorAll('li');
-			var title = this.element.querySelector('.ytplayer-title');
-			var description = this.element.querySelector('.ytplayer-description');
-
-			if (title) {
-				title.innerHTML = li.getAttribute('data-title');
-			}
-
-			if (description) {
-				description.innerHTML = li.getAttribute('data-description');
-			}
 
 			Array.prototype.forEach.call(thumbs, function (el, i) {
 				el.classList.remove('selected');
 			});
 
 			li.classList.add('selected');
+
+			this.updateVideoInfo(li.getAttribute('data-title'), li.getAttribute('data-description'));
+		}
+	}, {
+		key: 'updateVideoInfo',
+		value: function updateVideoInfo(title, description) {
+			var titleElement = this.element.querySelector('.ytplayer-title');
+			var descriptionElement = this.element.querySelector('.ytplayer-description');
+
+			if (titleElement) {
+				titleElement.innerHTML = title;
+			}
+
+			if (descriptionElement) {
+				descriptionElement.innerHTML = description;
+			}
 		}
 	}, {
 		key: 'addItem',
 		value: function addItem(snippet) {
-			var _this2 = this;
+			var _this3 = this;
 
 			var ul = this.element.querySelector('.ytplayer-list');
 			var thumbnail = snippet.thumbnails.medium.url;
@@ -92,8 +122,8 @@ var YTPlayer = function () {
 			li.setAttribute('data-description', snippet.description);
 			li.addEventListener('click', function (event) {
 				var li = event.target.parentNode;
-				_this2.updatePlaylist(li);
-				_this2.updateVideo(li);
+				_this3.updatePlaylist(li);
+				_this3.updateVideo(li);
 			});
 
 			ul.appendChild(li);
@@ -118,3 +148,4 @@ var YTPlayer = function () {
 
 	return YTPlayer;
 }();
+//# sourceMappingURL=ytplayer.js.map

@@ -1,3 +1,13 @@
+/*
+ * @name          ytplayer.js
+ * @version       1.0.1
+ * @lastmodified  2018-02-06
+ * @author        Saeid Mohadjer
+ * @repo		  https://github.com/smohadjer/youtube-playlist
+ *
+ * Licensed under the MIT License
+ */
+
 'use strict';
 
 class YTPlayer {
@@ -9,8 +19,19 @@ class YTPlayer {
 		if (this.playlistId) {
 			this.fetchPlaylist();
 		} else {
-			this.showVideo(this.videoId);
+			this.fetchVideo();
 		}
+	}
+
+	fetchVideo() {
+		const request = gapi.client.youtube.videos.list({
+			part: 'snippet',
+			id: this.videoId
+		}).then((response) => {
+			const snippet = response.result.items[0].snippet;
+			this.showVideo(this.videoId);
+			this.updateVideoInfo(snippet.title, snippet.description);
+		});
 	}
 
 	fetchPlaylist() {
@@ -19,7 +40,7 @@ class YTPlayer {
 			playlistId: this.playlistId,
 			maxResults: 50
 		}).then((response) => {
-			
+
 			let items = response.result.items;
 			let videoId;
 
@@ -46,22 +67,27 @@ class YTPlayer {
 	updatePlaylist(li) {
 		const ul = li.parentNode;
 		const thumbs = ul.querySelectorAll('li');
-		const title = this.element.querySelector('.ytplayer-title');
-		const description = this.element.querySelector('.ytplayer-description');
-
-		if (title) {
-			title.innerHTML = li.getAttribute('data-title');
-		}
-
-		if (description) {
-			description.innerHTML = li.getAttribute('data-description');
-		}
 
 		Array.prototype.forEach.call(thumbs, function(el, i){
 			el.classList.remove('selected');
 		});
 
 		li.classList.add('selected');
+
+		this.updateVideoInfo(li.getAttribute('data-title'), li.getAttribute('data-description'));
+	}
+
+	updateVideoInfo(title, description) {
+		const titleElement = this.element.querySelector('.ytplayer-title');
+		const descriptionElement = this.element.querySelector('.ytplayer-description');
+
+		if (titleElement) {
+			titleElement.innerHTML = title;
+		}
+
+		if (descriptionElement) {
+			descriptionElement.innerHTML = description;
+		}
 	}
 
 	addItem(snippet) {
