@@ -54,7 +54,7 @@
 				});
 			});
 
-			function onYouTubeIframeAPIReady() {
+			window.onYouTubeIframeAPIReady = function() {
 				youTubeIframeAPIIsReady = true;
 				if (youTubeIframeAPIIsReady && youtubePlaylistApiIsReady) {
 					initYTPlayer();

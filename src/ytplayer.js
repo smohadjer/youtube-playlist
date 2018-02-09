@@ -10,7 +10,7 @@
 
 'use strict';
 
-class YTPlayer {
+export default class YTPlayer {
 	constructor(options) {
 		this.element = options.element;
 		this.cb_playlist_click = options.cb_playlist_click;
@@ -26,7 +26,8 @@ class YTPlayer {
 	}
 
 	fetchVideo() {
-		const request = gapi.client.youtube.videos.list({
+		/*global gapi*/
+		gapi.client.youtube.videos.list({
 			part: 'snippet',
 			id: this.videoId
 		}).then((response) => {
@@ -40,7 +41,7 @@ class YTPlayer {
 	}
 
 	fetchPlaylist() {
-		const request = gapi.client.youtube.playlistItems.list({
+		gapi.client.youtube.playlistItems.list({
 			part: 'snippet',
 			playlistId: this.playlistId,
 			maxResults: 50
@@ -76,7 +77,7 @@ class YTPlayer {
 		const ul = li.parentNode;
 		const thumbs = ul.querySelectorAll('li');
 
-		Array.prototype.forEach.call(thumbs, function(el, i){
+		Array.prototype.forEach.call(thumbs, function(el){
 			el.classList.remove('selected');
 		});
 
@@ -123,10 +124,10 @@ class YTPlayer {
 	}
 
 	showVideo(videoId) {
+		/*global YT*/
 		this.player = new YT.Player(this.element.querySelector('.ytplayer-video'), {
 			videoId: videoId,
 			playerVars: {
-				'autoplay': 0,
 				'rel': 0,
 				'showinfo': 0
 			},
