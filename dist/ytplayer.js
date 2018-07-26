@@ -104,6 +104,12 @@ class YTPlayer {
 
 	addItem(snippet) {
 		const ul = this.element.querySelector('.ytplayer-list');
+
+		if (!snippet.thumbnails) {
+			console.warn('Item has no thumbnails!', snippet);
+			return;
+		}
+
 		const thumbnail = snippet.thumbnails.medium.url;
 		const videoId = snippet.resourceId.videoId;
 		const img = `<img src="${thumbnail}" />`;
