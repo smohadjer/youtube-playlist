@@ -8,7 +8,7 @@
 	</head>
 	<body>
 		<h1>Youtube playlist</h1>
-		<div class="ytplayer" data-playlist-id="FL5lXztBly8UeivS8M3uQbxA">
+		<div class="ytplayer" data-playlist-id="PLrsjrhqEEcIj8_U3-pvAD8yh-mR4ls0cJ">
 			<div class="ytplayer-wrapper">
 				<div class="ytplayer-video"></div>
 			</div>
@@ -16,7 +16,7 @@
 		</div>
 
 		<h1>Youtube playlist + title and description</h1>
-		<div class="ytplayer" data-playlist-id="PLrsjrhqEEcIjkTdI0RMSxzmbiiZq_ig3c">
+		<div class="ytplayer" data-playlist-id="PLrsjrhqEEcIj8_U3-pvAD8yh-mR4ls0cJ">
 			<div class="ytplayer-wrapper">
 				<div class="ytplayer-video"></div>
 			</div>
@@ -26,7 +26,7 @@
 		</div>
 
 		<h1>Youtube video + title and description</h1>
-		<div class="ytplayer" data-video-id="ztjFZysoTGk">
+		<div class="ytplayer" data-video-id="aZj7DIEftPg">
 			<div class="ytplayer-wrapper">
 				<div class="ytplayer-video"></div>
 			</div>
@@ -36,8 +36,9 @@
 
 		<script src="https://www.youtube.com/iframe_api"></script>
 		<script src="https://apis.google.com/js/api.js"></script>
-		<script src="../dist/ytplayer.js"></script>
-		<script>
+		<script type="module">
+			import YTPlayer from '../dist/ytplayer.min.js';
+
 			let youTubeIframeAPIIsReady = (typeof YT.Player === 'undefined') ? false : true;
 			let youtubePlaylistApiIsReady = false;
 
