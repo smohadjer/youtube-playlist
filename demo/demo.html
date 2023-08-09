@@ -36,11 +36,13 @@
 
 		<script src="https://www.youtube.com/iframe_api"></script>
 		<script src="https://apis.google.com/js/api.js"></script>
-		<script type="module">
-			import YTPlayer from '../dist/ytplayer.min.js';
-
+		<script>
 			let youTubeIframeAPIIsReady = (typeof YT.Player === 'undefined') ? false : true;
 			let youtubePlaylistApiIsReady = false;
+
+			window.onYouTubeIframeAPIReady = function() {
+				youTubeIframeAPIIsReady = true;
+			}
 
 			gapi.load('client', function() {
 				gapi.client.init({
@@ -48,19 +50,18 @@
 					discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest']
 				}).then(function() {
 					youtubePlaylistApiIsReady = true;
-
-					if (youTubeIframeAPIIsReady && youtubePlaylistApiIsReady) {
-						initYTPlayer();
-					}
 				});
 			});
+		</script>
+		<script type="module">
+			import YTPlayer from '../dist/ytplayer.min.js';
 
-			window.onYouTubeIframeAPIReady = function() {
-				youTubeIframeAPIIsReady = true;
+			const myInterval = window.setInterval(function() {
 				if (youTubeIframeAPIIsReady && youtubePlaylistApiIsReady) {
+					clearInterval(myInterval);
 					initYTPlayer();
 				}
-			}
+			}, 100);
 
 			function initYTPlayer() {
 				document.querySelectorAll('.ytplayer').forEach(function(elm) {
